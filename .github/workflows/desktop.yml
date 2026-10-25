@@ -2,6 +2,7 @@ name: Build desktop installers
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     tags: ['v*']
 permissions:
   contents: read
@@ -39,3 +40,4 @@ jobs:
             release/*.dmg
             release/*.zip
           if-no-files-found: error
+
