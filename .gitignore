@@ -1,0 +1,11 @@
+node_modules/
+release/
+__pycache__/
+*.pyc
+*.pth
+.env
+*.medannotate
+*.medrefs
+.medannotate-sort-key
+MedAnnotate-sort-*.json
+.DS_Store

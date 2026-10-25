@@ -1,0 +1,5 @@
+Flask>=3.1,<4
+waitress>=3,<4
+nibabel>=5,<6
+pydeface>=2.0,<3
+# FSL must be installed separately and its command-line tools available on PATH.
