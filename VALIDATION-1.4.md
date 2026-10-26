@@ -2,7 +2,7 @@
 
 Checked locally on Apple Silicon, 26 October 2026.
 
-- The complete automated suite passed 43 tests before the final modality/UI wording changes. Later targeted checks passed again; two additional tests cover CT and X-ray/mammography viewing. GitHub Actions runs the final complete suite on Linux, Windows and macOS.
+- All 45 automated tests passed in GitHub Actions on Linux, Windows and macOS for commit 2cb7ae5. Subsequent interface verification found unsupported native prompt dialogs in the embedded viewer; threshold and landmark entry were changed to in-app forms. Their preview/accept, undo/redo, landmark save and portable project backup workflows were then exercised successfully in the browser.
 - Static browser scripts were syntax checked and every script referenced by index.html was verified present.
 - The supplied NanoPix sample opened in the actual browser canvas at 1500 × 1000. It decoded into 1,500,000 unsigned 16-bit samples. DICOM export/reimport preserved every pixel value with zero mismatches. The original file was not changed or published.
 - Synthetic NanoPix tests cover decoding, malformed inputs, oversize rejection, DICOM conversion without source identifiers, automatic dental folder organization, verified copy and reopening from the sorting plan.
