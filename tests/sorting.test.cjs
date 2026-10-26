@@ -9,7 +9,7 @@ test('broader body regions and contradictory metadata stay explicit',()=>{
  assert.equal(S.classify({bodyPart:'BRAIN',seriesDescription:'knee'}).category,'REVIEW');assert.equal(S.automaticDecisions([{id:'x',...S.classify({},'periapical.jpg')}])[0].category,'REVIEW');
 });
 test('dental IO and compressed DICOM sort independently of viewer support',()=>{
- const meta=S.metadata(dcm(), 'file.dcm');assert.equal(meta.modality,'IO');assert.equal(meta.annotationCandidate,false);assert.equal(S.classify(meta).category,'DENTAL_PERIAPICAL');
+ const meta=S.metadata(dcm(), 'file.dcm');assert.equal(meta.modality,'IO');assert.equal(meta.annotationCandidate,true);assert.equal(S.classify(meta).category,'DENTAL_PERIAPICAL');
  const compressed=S.metadata(dcm({syntax:'1.2.840.10008.1.2.4.90'}),'no-extension');assert.equal(compressed.format,'DICOM');assert.equal(compressed.annotationCandidate,false);
 });
 test('series keys do not merge reused UIDs across subjects or studies',()=>{

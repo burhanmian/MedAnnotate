@@ -23,7 +23,10 @@ if len(api_token) < 24:
     raise SystemExit('Set MEDANNOTATE_MODEL_TOKEN to a random secret of at least 24 characters.')
 allowed_origins = set(os.environ.get('MEDANNOTATE_ALLOWED_ORIGINS', 'http://127.0.0.1:8787,http://localhost:8787').split(','))
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-model = sam_model_registry['vit_b'](checkpoint=str(checkpoint)).to(device).eval()
+torch.set_num_threads(min(4, os.cpu_count() or 1))
+model = sam_model_registry['vit_b'](checkpoint=None)
+model.load_state_dict(torch.load(str(checkpoint), map_location='cpu', weights_only=True))
+model = model.to(device).eval()
 lock = threading.Lock()
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 12 * 1024 * 1024
@@ -48,6 +51,10 @@ def cors(response):
         response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
     response.headers['Cache-Control'] = 'no-store'
     return response
+
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify(model='MedSAM-v1-vit_b', device=device, ready=True)
 
 @app.route('/segment', methods=['POST', 'OPTIONS'])
 def segment():

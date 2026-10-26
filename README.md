@@ -1,19 +1,28 @@
-# MedAnnotate 1.3
+# MedAnnotate 1.4
 
 **A product of Eye Candy Studio, for Atom Research.**
 
-A local-first annotation workspace based on the supplied MRI Annotation Protocol. This is a new implementation, not a recovered copy of the previous MedAnnotate app.
+A local medical-image viewing, sorting and annotation workspace for CT, MRI, X-ray, mammography and dental imaging. Supported encodings and conversion limits are documented below.
 
 ## Start using it
 
 - **Web:** open the published MedAnnotate Site in a current desktop browser. No Python or Node installation is required. Images and browser autosave remain on the computer running that browser.
 - **Windows portable package:** extract the entire ZIP, then open `MedAnnotate.exe`. Keep the adjacent runtime files and `resources` folder together. No Node or Python is required.
 - **macOS portable package:** extract the ZIP matching your Mac (Apple Silicon or Intel) and open `MedAnnotate.app`. It is an unsigned/unnotarized application package and has not been launch-tested on macOS. Your security settings may prevent opening it; a signed distribution requires a macOS build and Apple developer identity.
-- **Local web/source package:** with Node.js 22 installed, run `node serve.cjs` and open `http://127.0.0.1:8787`. Windows and macOS launchers are included. The browser version works offline once served locally. The server serves app files only, never your imported images.
+- **Local web/source package:** with Node.js 22 installed, run `node serve.cjs` and open `http://127.0.0.1:8787`. Windows and macOS launchers are included. The viewer works offline once served locally; first-time trained-model setup requires internet access. Imported images stay in the browser unless you explicitly request a connected model; managed local inference uses a loopback service.
 
 The portable packages bundle the official Electron 40.0.0 runtime. Runtime archives are verified against the release's SHA-256 checksums. Packaged native applications are not equivalent to native launch-tested or signed installers. Windows NSIS and macOS DMG build configuration is also included for subsequent signed releases.
 
-## Automatic folder organization (1.3)
+## New in 1.4
+
+- Open supported NanoPix `.ioss` images directly in the built-in viewer and sort their original files into dental folders.
+- Export a single 16-bit image as derived DICOM and reopen it inside MedAnnotate.
+- Prepare a trained local model automatically, with download verification and visible setup progress.
+- Connect 3D segmentation models through Segmentation studio and export reviewed learning datasets.
+
+See [Advanced workflows](ADVANCED-WORKFLOWS.md) for exact support boundaries and [Validation](VALIDATION-1.4.md) for checks performed.
+
+## Automatic folder organization
 
 1. Start the app and open **Organize scans**.
 2. Choose a mixed folder (use **Scan desktop folders** in the desktop app for large files).
@@ -75,15 +84,12 @@ The viewer shows one voxel-axis plane at a time, with I, J and K plane selectors
 
 ### Trained AI assistance
 
-The default grow/threshold/propagation tools are deterministic image processing, **not pretrained AI**. They require no downloads. A trained model is optional and is not bundled or automatically downloaded.
+Use **Set up local AI automatically** in the desktop app or local web launcher. It downloads an isolated runtime, model dependencies and trained weights, starts the local service, and manages connection settings for you. Draw an AI box, request a suggestion, then review it before accepting. First setup needs internet access and several GB of disk space; subsequent starts reuse verified files. The local grow, threshold and propagation tools still work without downloads.
 
-`ai/medsam_server.py` is a MedSAM v1 box-prompt adapter. Install a compatible PyTorch build and the official [MedSAM repository](https://github.com/bowang-lab/MedSAM), its dependencies, and its published `medsam_vit_b.pth` checkpoint in an isolated Python environment. Install `ai/requirements.txt`. Set:
+See [Advanced workflows](ADVANCED-WORKFLOWS.md) for supported platforms, NanoPix/DICOM support, model limitations and external-server configuration.
 
-- `MEDSAM_CHECKPOINT`: absolute checkpoint path.
-- `MEDANNOTATE_MODEL_TOKEN`: a random secret of at least 24 characters.
-- `MEDANNOTATE_ALLOWED_ORIGINS`: comma-separated exact browser origins. Defaults to `http://127.0.0.1:8787,http://localhost:8787`; add the deployed web origin if needed. For the Electron file-based app only, `null` can be explicitly added; require the API token and keep the server on loopback.
 
-Run `python ai/medsam_server.py`. It listens on `127.0.0.1:8766`. Enter `http://127.0.0.1:8766/segment` and the token in the app. Draw a box, approve sending the current slice, request a mask, and review the yellow preview. GPU inference is used when CUDA is available, otherwise CPU. CPU inference can exceed the client timeout. The adapter has not been inference-tested with a checkpoint in this environment.
+
 
 A hosted HTTPS app may restrict connections to a local HTTP endpoint. Use the locally served app with a local model, or a model behind authenticated HTTPS for a remote workflow. For remote GPU access, put an authenticated TLS reverse proxy in front of the model server or forward it over an approved private network. The included model server deliberately binds to loopback.
 

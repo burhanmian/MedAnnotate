@@ -1,0 +1,10 @@
+.git
+.local-ai
+node_modules
+release
+*.pth
+*.ioss
+*.dcm
+*.medannotate
+*.medrefs
+__pycache__

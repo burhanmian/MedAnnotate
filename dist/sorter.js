@@ -37,9 +37,10 @@ function metadata(bytes,name){
  const parser=root.dicomParser||(typeof require!=='undefined'?require('./dicomParser.min.js'):null),u=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes);
  if(u.length>=132&&String.fromCharCode(...u.slice(128,132))==='DICM'){
   const d=parser.parseDicom(u,{untilTag:'x7fe00010'}),s=tag=>(d.string('x'+tag)||'').trim(),modality=s('00080060'),syntax=s('00020010');
-  const viewable=['1.2.840.10008.1.2','1.2.840.10008.1.2.1','1.2.840.10008.1.2.2'].includes(syntax)&&(s('00280008')||'1')==='1'&&!!s('00200032')&&!!s('00200037')&&!!s('00280030');
+  const viewable=['1.2.840.10008.1.2','1.2.840.10008.1.2.1','1.2.840.10008.1.2.2'].includes(syntax)&&(s('00280008')||'1')==='1'&&(['IO','PX','DX','CR','MG'].includes(modality)||s('00080016')==='1.2.840.10008.5.1.4.1.1.7'||(!!s('00200032')&&!!s('00200037')&&!!s('00280030')))&&d.uint16('x00280002')===1&&['MONOCHROME1','MONOCHROME2'].includes(s('00280004'))&&[8,16].includes(d.uint16('x00280100'));
   return {format:'DICOM',modality:/^[A-Z0-9_]{1,16}$/.test(modality)?modality:'UNKNOWN',bodyPart:s('00180015'),studyDescription:s('00081030'),seriesDescription:s('0008103e'),protocol:s('00181030'),series:s('0020000e'),study:s('0020000d'),instance:s('00080018'),subject:s('00100020')?'patient:'+s('00100021')+'|'+s('00100020'):'',transferSyntax:syntax,burnedIn:s('00280301')||'UNKNOWN',annotationCandidate:viewable,sortOnlyReason:viewable?'':'Sorting only: compressed/multiframe/non-spatial DICOM may need conversion for annotation'};
  }
+ if(/\.ioss$/i.test(name)){try{return (root.MedIoss||(typeof require!=='undefined'?require('./ioss.js'):null)).metadata(u)}catch{return {format:'FILE',modality:'UNKNOWN',annotationCandidate:false,sortOnlyReason:'Unrecognized or damaged NanoPix image; original preserved. Export DICOM from NanoPix to open it.'}}}
  if(/\.nii(\.gz)?$/i.test(name))return {format:'NIFTI',modality:'UNKNOWN',annotationCandidate:true};
  if(/\.(png|jpe?g)$/i.test(name))return {format:'IMAGE',modality:'UNKNOWN',annotationCandidate:true};
  // Unknown and linked formats are kept together, with their original relative paths.

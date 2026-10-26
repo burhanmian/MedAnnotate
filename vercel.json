@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo Static viewer has no build dependencies",
+  "buildCommand": "node scripts/check-static.cjs",
+  "outputDirectory": "dist"
+}

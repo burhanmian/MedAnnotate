@@ -1,6 +1,6 @@
 {
   "name": "medannotate-studio",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "description": "MedAnnotate by Eye Candy Studio for Atom Research: sorting, annotation and dataset release",
   "author": "Eye Candy Studio \u2014 Atom Research",
@@ -51,6 +51,12 @@
       "target": [
         "AppImage"
       ]
-    }
+    },
+    "extraResources": [
+      {
+        "from": "ai/medsam_server.py",
+        "to": "ai/medsam_server.py"
+      }
+    ]
   }
 }

@@ -9,3 +9,6 @@ __pycache__/
 .medannotate-sort-key
 MedAnnotate-sort-*.json
 .DS_Store
+
+.local-ai/
+__pycache__/
