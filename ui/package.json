@@ -1,0 +1,6 @@
+{
+  "name": "medannotate-ui-build",
+  "private": true,
+  "scripts": { "build": "node build.cjs" },
+  "devDependencies": { "@santi020k/lumen-elements": "4.3.0", "esbuild": "0.25.12" }
+}

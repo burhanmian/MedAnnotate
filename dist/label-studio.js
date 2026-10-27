@@ -34,7 +34,7 @@ function renderLabelModels(){
    C.check(!controller.signal.aborted,'Request canceled');const result=await LabelClient.decodeMask(bytes,C);const proposed=LabelClient.mapMask(c,result,mapping,project.labels);
    C.check(current()===c&&c.data===data&&(c.annotationRevision||0)===caseRevision&&JSON.stringify(project.labels)===settings,'The image, labels or annotations changed during inference. Run a new suggestion.');labelReady(c);
    C.check(proposed.count>0,'The selected model labels returned an empty mask. No annotations were changed.');
-   pending={...proposed,fullVolume:true,caseId:c.id,revision:caseRevision,source:'Segmentation server / '+model.id,model:model.id};
+   pending={...proposed,fullVolume:true,caseId:c.id,revision:caseRevision,source:'Trained volume suggestion',model:model.id};
    $('dialog').close();renderCaseDetails();draw();message('Volume suggestion ready. Inspect it across slices and planes, then accept or discard. Existing labels are protected unless overwrite is enabled.');
   }finally{labelRequest=null;controls.forEach(el=>el.disabled=false);if($('labelCancel'))$('labelCancel').disabled=true;}
  });

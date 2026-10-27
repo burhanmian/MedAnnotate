@@ -16,3 +16,11 @@ Checked locally on Apple Silicon, 26 October 2026.
 This is research annotation software, not a diagnostic device. Not every medical file format or DICOM transfer syntax is viewable. The current NanoPix decoder covers the observed layout, not a published universal vendor specification. Unknown files retain their original hierarchy during sorting. Compressed/enhanced DICOM needs conversion. Exact support limits and setup requirements are in ADVANCED-WORKFLOWS.md.
 
 Model training, external chat-provider accounts, Google Drive OAuth setup, external defacing infrastructure and dental model quality are not certified by these tests. Patient examples, generated patient DICOM files, private references, tokens and model weights are excluded from the public repository and web deployment.
+
+## Interface update and follow-up validation — 2026-10-27
+
+- Replaced accumulated theme overrides with a responsive semantic-token theme; light controls surround a dark medical-image canvas. Added locally bundled Button, Badge and Card primitives, keyboard focus and a skip link. No CDN scripts are used.
+- Browser checks: restored existing annotations and landmark, keyboard Enter opens dataset export, sorting dialog opens, Review panel remains reachable, threshold preview works, and accepting a no-op suggestion closes its preview. No browser error logs on this test page.
+- Fixed stale suggestion controls after no-op acceptance; accept/discard/undo/redo now announce their actual outcomes. User-facing suggestion descriptions use neutral MedAnnotate wording; required licenses and provenance remain in the repository.
+- All 45 Node tests pass with local loopback access. The restricted sandbox's initial EPERM listener errors were environmental; rerunning with local server permission passed.
+- The earlier inference restriction is resolved: the installed trained model processed a synthetic 128 × 128 image in 7.1 seconds, returned 16,384 binary mask values with 5,127 foreground pixels, and matched the requested dimensions. This is execution/contract validation, not a clinical accuracy assessment.
