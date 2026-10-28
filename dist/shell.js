@@ -44,8 +44,21 @@ document.addEventListener('keydown',event=>{
  if(event.target.closest('input,textarea,select,[contenteditable="true"]'))return;
  const key=event.key.toLowerCase();
  if(key==='s'){event.preventDefault();$('save').click()}
- else if(key==='z'&&current()){event.preventDefault();$(event.shiftKey?'redo':'undo').click()}
+ else if((key==='z'||key==='y')&&current()){event.preventDefault();$(event.shiftKey||key==='y'?'redo':'undo').click()}
 });
 updateGuidance();
 
 document.addEventListener('keydown',event=>{if(event.defaultPrevented||event.repeat||event.metaKey||event.ctrlKey||event.altKey||$('dialog').open||!current()||event.target.closest('input,textarea,select,button,lumen-button,summary,[contenteditable="true"]'))return;const tools={b:'brush',e:'eraser',g:'grow',l:'landmark',a:'box'};const selected=tools[event.key.toLowerCase()];if(selected){event.preventDefault();document.querySelector('[data-tool="'+selected+'"]').click()}});
+
+function filterCaseList(){
+ const query=$('caseSearch').value.trim().toLowerCase();let visible=0;
+ for(const item of $('cases').querySelectorAll('[data-case]')){const c=project.cases[Number(item.dataset.case)];const matches=!query||[c.id,c.name,c.modality,c.status,c.synthetic?'practice':''].join(' ').toLowerCase().includes(query);item.hidden=!matches;if(matches)visible++}
+ const notice=$('caseSearchResult');notice.hidden=!query;notice.textContent=visible?visible+' matching '+(visible===1?'case':'cases'):'No matching cases. Try a case ID, modality or status.';
+}
+const searchRenderCases=renderCases;
+renderCases=function(){searchRenderCases();filterCaseList()};
+$('caseSearch').addEventListener('input',filterCaseList);
+filterCaseList();
+bind('focusView',()=>{const focused=document.body.classList.toggle('viewer-focused');$('focusView').textContent=focused?'Show panels':'Focus view';$('focusView').setAttribute('aria-pressed',String(focused));draw()});
+document.querySelector('[data-tool="landmark"]').addEventListener('click',()=>{$('moreAnnotations').open=true});
+document.addEventListener('keydown',event=>{if(event.defaultPrevented||event.metaKey||event.ctrlKey||event.altKey||$('dialog').open||event.target.closest('input,textarea,select,button,lumen-button,summary,[contenteditable="true"]'))return;if(event.key==='Escape'&&document.body.classList.contains('viewer-focused')){$('focusView').click();return}if(current()&&['ArrowRight','ArrowLeft'].includes(event.key)){event.preventDefault();$(event.key==='ArrowRight'?'next':'prev').click()}});
