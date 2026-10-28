@@ -1,6 +1,6 @@
 # MedAnnotate 1.2 — privacy and dataset release
 
-A product of Eye Candy Studio, for Atom Research.
+A product of Mian Burhan Aftab.
 
 ## What is automatic
 

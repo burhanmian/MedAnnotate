@@ -47,3 +47,5 @@ document.addEventListener('keydown',event=>{
  else if(key==='z'&&current()){event.preventDefault();$(event.shiftKey?'redo':'undo').click()}
 });
 updateGuidance();
+
+document.addEventListener('keydown',event=>{if(event.defaultPrevented||event.repeat||event.metaKey||event.ctrlKey||event.altKey||$('dialog').open||!current()||event.target.closest('input,textarea,select,button,lumen-button,summary,[contenteditable="true"]'))return;const tools={b:'brush',e:'eraser',g:'grow',l:'landmark',a:'box'};const selected=tools[event.key.toLowerCase()];if(selected){event.preventDefault();document.querySelector('[data-tool="'+selected+'"]').click()}});

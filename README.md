@@ -1,6 +1,6 @@
 # MedAnnotate 1.4
 
-**A product of Eye Candy Studio, for Atom Research.**
+**A product of Mian Burhan Aftab.**
 
 A local medical-image viewing, sorting and annotation workspace for CT, MRI, X-ray, mammography and dental imaging. Supported encodings and conversion limits are documented below.
 
